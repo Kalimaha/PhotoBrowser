@@ -55,6 +55,12 @@ exports.json2array = function (json) {
     return works;
 };
 
+/**
+ * Extract all the images URLs from the array.
+ * @param array The array of works.
+ * @param limit The maximum number of images retrieved (optional).
+ * @returns {Array} The URLs of the images.
+ */
 exports.array2thumbnails = function (array, limit) {
     var urls = [],
         out_size = limit || array.length,
@@ -68,6 +74,22 @@ exports.array2thumbnails = function (array, limit) {
         }
     }
     return urls;
+};
+
+exports.array2makes = function (array) {
+    var makes = [],
+        buffer = {},
+        i,
+        j;
+    for (i = 0; i < array.length; i += 1) {
+        buffer[array[i].exif[0].make] = true;
+    }
+    for (i = 0; i < Object.keys(buffer).length; i += 1) {
+        if (Object.keys(buffer)[i] !== 'undefined') {
+            makes.push(Object.keys(buffer)[i]);
+        }
+    }
+    return makes;
 };
 
 //exports.create_html_file = function (template_name, output_directory, output_name) {
