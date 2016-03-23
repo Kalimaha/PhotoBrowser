@@ -92,17 +92,6 @@ exports.array2makes = function (array) {
     return makes;
 };
 
-//exports.create_html_file = function (template_name, output_directory, output_name) {
-//    var handlebars = require('handlebars'),
-//        fs = require('fs'),
-//        data = {
-//            title: 'Photo Browser Index'
-//        },
-//        source = fs.readFileSync('src/html/index.hbs', 'utf-8'),
-//        template = handlebars.compile(source),
-//        html = template(data);
-//};
-
 /**
  * Create a file in the given directory with the given content.
  * @param file_content The content of the file.

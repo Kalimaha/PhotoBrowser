@@ -12,23 +12,19 @@
                     {{title}}
                 </h1>
                 <nav>
-                    <a href="/html/">HTML</a> |
-                    <a href="/css/">CSS</a> |
-                    <a href="/js/">JavaScript</a> |
-                    <a href="/jquery/">jQuery</a>
+                    Available makes:
+                    {{#each makes}}
+                        <a href="/html/">{{this}}</a> |
+                    {{/each}}
                 </nav>
             </header>
             <hr>
             <div class="row">
-                <div class="col-xs-6 col-lg-4">
-                    <img class="img-responsive img-thumbnail" src="http://ih1.redbubble.net/work.777577.1.flat,550x550,075,f.jpg">
-                </div>
-                <div class="col-xs-6 col-lg-4">
-                    <img class="img-responsive img-thumbnail" src="http://ih1.redbubble.net/work.777577.1.flat,550x550,075,f.jpg">
-                </div>
-                <div class="col-xs-6 col-lg-4">
-                    <img class="img-responsive img-thumbnail" src="http://ih1.redbubble.net/work.777577.1.flat,550x550,075,f.jpg">
-                </div>
+                {{#each urls}}
+                    <div class="col-xs-2">
+                        <img class="img-responsive img-thumbnail" src="{{this}}">
+                    </div>
+                {{/each}}
             </div>
         </div>
     </body>
