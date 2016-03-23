@@ -8,6 +8,11 @@
 /*global exports, require*/
 'use strict';
 
+/**
+ * Read an XML file and convert it into a string.
+ * @param filepath The absolute path to the file.
+ * @returns {*} The string of the content.
+ */
 exports.xml2string = function (filepath) {
     var fs = require('fs'),
         file;
@@ -20,4 +25,16 @@ exports.xml2string = function (filepath) {
         throw new Error('No such file or directory.');
     }
     return file;
+};
+
+exports.string2json = function (xml_string) {
+    var parser = require('xml2json');
+    return parser.toJson(xml_string, {
+        object: true,
+        arrayNotation: true
+    });
+};
+
+exports.json2array = function (json) {
+    console.log(json.works[0].work.length);
 };

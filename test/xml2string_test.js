@@ -5,7 +5,7 @@
 
     var lib = require('../src/js/exif_to_photobrowser.js');
 
-    exports.exif_to_photobrowser = {
+    exports.xml_to_string = {
 
         'Load an XML file and converts it into a string.': function (test) {
             test.expect(1);
