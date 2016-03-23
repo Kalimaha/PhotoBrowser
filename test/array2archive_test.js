@@ -15,7 +15,7 @@
                 archive = lib.array2archive(array);
             test.equal(typeof archive, 'object');
             test.equal(Object.keys(archive.tree).length, 6);
-            test.equal(Object.keys(archive.tree.Canon).length, 2);
+            test.equal(Object.keys(archive.tree.CANON).length, 2);
             test.equal(Object.keys(archive.tree.LEICA['D-LUX 3']).length, 5);
             test.equal(archive.works.length, 14);
             test.done();

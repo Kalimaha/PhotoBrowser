@@ -79,7 +79,7 @@ exports.create_html_file = function (file_content, output_directory, output_name
 };
 
 /**
- * Organize the original file in a tree where each leaf is a make. Each make then
+ * Organize the original file in a tree where each leaf is a maker. Each maker then
  * has the various models, and each model holds the URLs of the pictures.
  * @param array The array produced out of the XML file.
  * @returns {{}}
@@ -90,22 +90,22 @@ exports.array2archive = function (array) {
             works: []
         },
         i,
-        make,
+        maker,
         model,
         url;
     for (i = 0; i < array.length; i += 1) {
-        make = array[i].exif[0].make !== undefined ? array[i].exif[0].make[0] : undefined;
+        maker = array[i].exif[0].make !== undefined ? array[i].exif[0].make[0] : undefined;
         model = array[i].exif[0].model !== undefined ? array[i].exif[0].model[0] : undefined;
         url = array[i].urls[0].url[2].$t;
         archive.works.push(url);
-        if (make !== undefined && archive.tree[make] === undefined) {
-            archive.tree[make] = {};
+        if (maker !== undefined && archive.tree[maker.toUpperCase()] === undefined) {
+            archive.tree[maker.toUpperCase()] = {};
         }
-        if (model !== undefined && archive.tree[make][model] === undefined) {
-            archive.tree[make][model] = [];
+        if (model !== undefined && archive.tree[maker.toUpperCase()][model.toUpperCase()] === undefined) {
+            archive.tree[maker.toUpperCase()][model.toUpperCase()] = [];
         }
         try {
-            archive.tree[make][model].push(url);
+            archive.tree[maker.toUpperCase()][model.toUpperCase()].push(url);
         } catch (ignore) {
 
         }
@@ -113,29 +113,59 @@ exports.array2archive = function (array) {
     return archive;
 };
 
-exports.get_makes = function (archive) {
-    var makes = [],
+/**
+ * Extract all the makers from the archive.
+ * @param archive The object storing makers, models and works.
+ * @returns {Array} An array of maker objects.
+ */
+exports.get_makers = function (archive) {
+    var makers = [],
         i,
-        make;
+        maker;
     for (i = 0; i < Object.keys(archive.tree).length; i += 1) {
-        make = Object.keys(archive.tree)[i];
-        makes.push({
-            name: make.toUpperCase(),
-            id: make.split(' ')[0].toUpperCase()
+        maker = Object.keys(archive.tree)[i];
+        makers.push({
+            name: maker.toUpperCase(),
+            id: maker.split(' ')[0].toUpperCase()
         });
     }
-    makes.sort(function (a, b) {
+    makers.sort(function (a, b) {
         return a.name > b.name;
     });
-    return makes;
+    return makers;
 };
 
+exports.get_models = function (archive, make) {
+    var models = [],
+        i,
+        model;
+    if (archive.tree[make] === undefined) {
+        throw new Error('The make ' + make + ' is not available.');
+    }
+    for (i = 0; i < Object.keys(archive.tree[make]).length; i += 1) {
+        model = Object.keys(archive.tree[make])[i];
+        models.push({
+            name: model.toUpperCase(),
+            id: model.replace(/\s+/g, '').toUpperCase()
+        });
+    }
+    models.sort(function (a, b) {
+        return a.name > b.name;
+    });
+    return models;
+};
+
+/**
+ * Load the index template and fill it with makes and works.
+ * @param archive archive The object storing makes, models and works.
+ * @param output_folder The folder where the new file will be stored.
+ */
 exports.create_index_page = function (archive, output_folder) {
     var handlebars = require('handlebars'),
         fs = require('fs'),
         data = {
             title: 'Photo Browser - Index',
-            makes: this.get_makes(archive),
+            makers: this.get_makers(archive),
             urls: archive.works.splice(0, 10)
         },
         template,
