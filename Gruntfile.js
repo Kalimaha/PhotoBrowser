@@ -35,6 +35,11 @@
             /* Unit tests. */
             nodeunit: {
                 tests: ['test/*_test.js']
+            },
+
+            /* Plugin configuration. */
+            exif_to_photobrowser: {
+                custom_options: {}
             }
 
         });
@@ -50,7 +55,7 @@
         grunt.registerTask('test', ['nodeunit']);
 
         /* By default, lint and run all tests. */
-        grunt.registerTask('default', ['jshint', 'test']);
+        grunt.registerTask('default', ['exif_to_photobrowser']);
 
     };
 
