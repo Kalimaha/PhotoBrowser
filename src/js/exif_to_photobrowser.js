@@ -55,6 +55,21 @@ exports.json2array = function (json) {
     return works;
 };
 
+exports.array2thumbnails = function (array) {
+    var urls = [],
+        i,
+        j;
+    for (i = 0; i < array.length; i += 1) {
+        for (j = 0; j < array[i].urls[0].url.length; j += 1) {
+            if (array[i].urls[0].url[j].type === 'large') {
+                urls.push(array[i].urls[0].url[j].$t);
+            }
+        }
+    }
+    console.log(urls);
+    return urls;
+};
+
 //exports.create_html_file = function (template_name, output_directory, output_name) {
 //    var handlebars = require('handlebars'),
 //        fs = require('fs'),
@@ -66,6 +81,12 @@ exports.json2array = function (json) {
 //        html = template(data);
 //};
 
+/**
+ * Create a file in the given directory with the given content.
+ * @param file_content The content of the file.
+ * @param output_directory The output directory.
+ * @param output_name The name of the output file.
+ */
 exports.create_html_file = function (file_content, output_directory, output_name) {
     var fs = require('fs'),
         path = require('path');

@@ -8,9 +8,10 @@
     exports.xml_to_string = {
 
         'Create a file at the given position with the given content.': function (test) {
-            test.expect(0);
+            var fs = require('fs');
+            test.expect(1);
             lib.create_html_file('MyFile', '/tmp/', 'test.txt');
-            //test.equal(typeof lib.xml2string('resources/xml/works.xml'), 'string');
+            test.equal(fs.lstatSync('/tmp/test.txt').isFile(), true);
             test.done();
         },
 
