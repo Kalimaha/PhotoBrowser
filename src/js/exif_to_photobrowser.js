@@ -54,3 +54,31 @@ exports.json2array = function (json) {
     }
     return works;
 };
+
+//exports.create_html_file = function (template_name, output_directory, output_name) {
+//    var handlebars = require('handlebars'),
+//        fs = require('fs'),
+//        data = {
+//            title: 'Photo Browser Index'
+//        },
+//        source = fs.readFileSync('src/html/index.hbs', 'utf-8'),
+//        template = handlebars.compile(source),
+//        html = template(data);
+//};
+
+exports.create_html_file = function (file_content, output_directory, output_name) {
+    var fs = require('fs'),
+        path = require('path');
+    if (!fs.lstatSync(output_directory).isDirectory()) {
+        throw new Error(output_directory + ' is not a directory.');
+    }
+    try {
+        fs.writeFile(path.join(output_directory, output_name), file_content, function (err) {
+            if (err) {
+                throw new Error(err);
+            }
+        });
+    } catch (e) {
+        throw new Error('Error while writing the file');
+    }
+};
