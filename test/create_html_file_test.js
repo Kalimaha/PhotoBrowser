@@ -13,10 +13,10 @@
                 test.expect(1);
                 lib.create_html_file('MyFile', '/tmp/', 'test.txt');
                 test.equal(fs.lstatSync('/tmp/test.txt').isFile(), true);
+                test.done();
             } catch (e) {
                 console.log('Fails on TravisCI.');
             }
-            test.done();
         },
 
         'Throws error when the directory does not exists.': function (test) {
