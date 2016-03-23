@@ -17,7 +17,7 @@
                 archive = lib.array2archive(array);
             try {
                 test.expect(1);
-                lib.create_make_pages(archive, 'output');
+                lib.create_maker_pages(archive, 'output');
                 test.equal(fs.lstatSync('output/pages/CANON.html').isFile(), true);
                 test.done();
             } catch (e) {

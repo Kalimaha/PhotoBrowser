@@ -68,6 +68,7 @@ exports.create_html_file = function (file_content, output_directory, output_name
         throw new Error(output_directory + ' is not a directory.');
     }
     try {
+        console.log('WRITE ' + path.join(output_directory, output_name));
         fs.writeFile(path.join(output_directory, output_name), file_content, function (err) {
             if (err) {
                 throw new Error(err);
@@ -135,15 +136,21 @@ exports.get_makers = function (archive) {
     return makers;
 };
 
-exports.get_models = function (archive, make) {
+/**
+ * Get all the models for a given maker.
+ * @param archive archive The object storing makers, models and works.
+ * @param maker The name of the maker.
+ * @returns {Array} An array of model objects.
+ */
+exports.get_models = function (archive, maker) {
     var models = [],
         i,
         model;
-    if (archive.tree[make] === undefined) {
-        throw new Error('The make ' + make + ' is not available.');
+    if (archive.tree[maker] === undefined) {
+        throw new Error('The maker ' + maker + ' is not available.');
     }
-    for (i = 0; i < Object.keys(archive.tree[make]).length; i += 1) {
-        model = Object.keys(archive.tree[make])[i];
+    for (i = 0; i < Object.keys(archive.tree[maker]).length; i += 1) {
+        model = Object.keys(archive.tree[maker])[i];
         models.push({
             name: model.toUpperCase(),
             id: model.replace(/\s+/g, '').toUpperCase()
@@ -179,4 +186,37 @@ exports.create_index_page = function (archive, output_folder) {
         html = template(data);
         that.create_html_file(html, output_folder, 'index.html');
     });
+};
+
+exports.create_maker_pages = function (archive, output_folder) {
+    var handlebars = require('handlebars'),
+        fs = require('fs'),
+        data,
+        template,
+        html,
+        that = this,
+        makers = this.get_makers(archive),
+        maker,
+        i,
+        j,
+        source,
+        urls,
+        models;
+    for (i = 0; i < makers.length; i += 1) {
+        maker = makers[i];
+        models = that.get_models(archive, maker.id);
+        urls = [];
+        for (j = 0; j < models.length; j += 1) {
+            urls.push.apply(urls, archive.tree[maker.name][models[j].name]);
+        }
+        source = fs.readFileSync('src/html/maker.hbs', 'utf-8');
+        data = {
+            title: 'Photo Browser - ' + maker.name,
+            models: models,
+            urls: urls
+        };
+        template = handlebars.compile(source);
+        html = template(data);
+        that.create_html_file(html, output_folder, maker.id + '.html');
+    }
 };
