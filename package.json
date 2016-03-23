@@ -18,7 +18,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/Kalimaha/grunt-exif-to-photobrowser/blob/master/LICENSE-MIT"
+      "url": "https://github.com/Kalimaha/grunt-exif-to-photobrowser/blob/master/LICENSE"
     }
   ],
   "engines": {
@@ -28,8 +28,8 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-nodeunit": "^0.3.3",
     "grunt": "~0.4.5"
   },
