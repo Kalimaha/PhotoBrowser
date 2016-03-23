@@ -76,6 +76,11 @@ exports.array2thumbnails = function (array, limit) {
     return urls;
 };
 
+/**
+ * Extract all the makes from the array.
+ * @param array The array of works.
+ * @returns {Array} The makes.
+ */
 exports.array2makes = function (array) {
     var makes = [],
         buffer = {},
@@ -113,4 +118,39 @@ exports.create_html_file = function (file_content, output_directory, output_name
     } catch (e) {
         throw new Error('Error while writing the file');
     }
+};
+
+/**
+ * Organize the original file in a tree where each leaf is a make. Each make then
+ * has the various models, and each model holds the URLs of the pictures.
+ * @param array The array produced out of the XML file.
+ * @returns {{}}
+ */
+exports.array2archive = function (array) {
+    var archive = {},
+        i,
+        make,
+        model,
+        url;
+    for (i = 0; i < array.length; i += 1) {
+        make = array[i].exif[0].make !== undefined ? array[i].exif[0].make[0] : undefined;
+        model = array[i].exif[0].model !== undefined ? array[i].exif[0].model[0] : undefined;
+        url = array[i].urls[0].url[2].$t;
+        if (make !== undefined && archive[make] === undefined) {
+            archive[make] = {};
+        }
+        if (model !== undefined && archive[make][model] === undefined) {
+            archive[make][model] = [];
+        }
+        try {
+            archive[make][model].push(url);
+        } catch (ignore) {
+
+        }
+    }
+    return archive;
+};
+
+exports.get_makes = function (archive) {
+    return Object.keys(archive);
 };
