@@ -55,18 +55,18 @@ exports.json2array = function (json) {
     return works;
 };
 
-exports.array2thumbnails = function (array) {
+exports.array2thumbnails = function (array, limit) {
     var urls = [],
+        out_size = limit || array.length,
         i,
         j;
-    for (i = 0; i < array.length; i += 1) {
+    for (i = 0; i < out_size; i += 1) {
         for (j = 0; j < array[i].urls[0].url.length; j += 1) {
             if (array[i].urls[0].url[j].type === 'large') {
                 urls.push(array[i].urls[0].url[j].$t);
             }
         }
     }
-    console.log(urls);
     return urls;
 };
 
