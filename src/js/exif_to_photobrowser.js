@@ -27,6 +27,11 @@ exports.xml2string = function (filepath) {
     return file;
 };
 
+/**
+ * Convert an XML string into a JSON object.
+ * @param xml_string The XML string.
+ * @returns {*} A JSON representation of the original string.
+ */
 exports.string2json = function (xml_string) {
     var parser = require('xml2json');
     return parser.toJson(xml_string, {
@@ -35,6 +40,17 @@ exports.string2json = function (xml_string) {
     });
 };
 
+/**
+ * The format returned by the xml2json plug-in is not suitable for further
+ * manipulation. This function create an array of work objects.
+ * @param json The JSON object produced by the xml2json plug-in.
+ * @returns {*} An array of objects.
+ */
 exports.json2array = function (json) {
-    console.log(json.works[0].work.length);
+    var works = [],
+        i;
+    for (i = 0; i < json.works[0].work.length; i += 1) {
+        works.push(json.works[0].work[i]);
+    }
+    return works;
 };
