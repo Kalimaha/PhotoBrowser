@@ -16,7 +16,7 @@
                 makes = lib.get_makes(archive);
             test.equal(typeof makes, 'object');
             test.equal(makes.constructor, Array);
-            test.equal(Object.keys(makes).length, 6);
+            test.equal(makes.length, 6);
             test.done();
         }
 

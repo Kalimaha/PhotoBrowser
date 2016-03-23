@@ -85,7 +85,10 @@ exports.create_html_file = function (file_content, output_directory, output_name
  * @returns {{}}
  */
 exports.array2archive = function (array) {
-    var archive = {},
+    var archive = {
+            tree: {},
+            works: []
+        },
         i,
         make,
         model,
@@ -94,14 +97,15 @@ exports.array2archive = function (array) {
         make = array[i].exif[0].make !== undefined ? array[i].exif[0].make[0] : undefined;
         model = array[i].exif[0].model !== undefined ? array[i].exif[0].model[0] : undefined;
         url = array[i].urls[0].url[2].$t;
-        if (make !== undefined && archive[make] === undefined) {
-            archive[make] = {};
+        if (make !== undefined && archive.tree[make] === undefined) {
+            archive.tree[make] = {};
         }
-        if (model !== undefined && archive[make][model] === undefined) {
-            archive[make][model] = [];
+        if (model !== undefined && archive.tree[make][model] === undefined) {
+            archive.tree[make][model] = [];
         }
         try {
-            archive[make][model].push(url);
+            archive.tree[make][model].push(url);
+            archive.works.push(url);
         } catch (ignore) {
 
         }
@@ -110,5 +114,5 @@ exports.array2archive = function (array) {
 };
 
 exports.get_makes = function (archive) {
-    return Object.keys(archive);
+    return Object.keys(archive.tree);
 };
