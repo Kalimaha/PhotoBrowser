@@ -120,10 +120,13 @@ exports.get_makes = function (archive) {
     for (i = 0; i < Object.keys(archive.tree).length; i += 1) {
         make = Object.keys(archive.tree)[i];
         makes.push({
-            name: make,
+            name: make.toUpperCase(),
             id: make.split(' ')[0].toUpperCase()
         });
     }
+    makes.sort(function (a, b) {
+        return a.name > b.name;
+    });
     return makes;
 };
 

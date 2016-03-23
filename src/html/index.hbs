@@ -12,9 +12,9 @@
                     {{title}}
                 </h1>
                 <nav>
-                    Available makes:
+                    Available makes: |
                     {{#each makes}}
-                        <a href="/html/">{{this}}</a> |
+                        <a href="pages/{{this.id}}.html">{{this.name}}</a> |
                     {{/each}}
                 </nav>
             </header>
