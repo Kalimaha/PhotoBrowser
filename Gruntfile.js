@@ -5,69 +5,53 @@
  * Copyright (c) 2016 Guido Barbaglia
  * Licensed under the MIT license.
  */
+(function () {
 
-'use strict';
+    'use strict';
 
-module.exports = function(grunt) {
+    /*global module*/
+    module.exports = function (grunt) {
 
-  // Project configuration.
-  grunt.initConfig({
-    jshint: {
-      all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
+        /* Project configuration. */
+        grunt.initConfig({
 
-    // Before generating any new files, remove any previously-created files.
-    clean: {
-      tests: ['tmp']
-    },
+            jshint: {
+                all: [
+                    'Gruntfile.js',
+                    'src/js/*.js',
+                    'src/js/tasks/*.js',
+                    '<%= nodeunit.tests %>'
+                ],
+                options: {
+                    jshintrc: '.jshintrc'
+                }
+            },
 
-    // Configuration to be run (and then tested).
-    exif_to_photobrowser: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
-    },
+              /* Before generating any new files, remove any previously-created files. */
+            clean: {
+                tests: ['tmp']
+            },
 
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js']
-    }
+            /* Unit tests. */
+            nodeunit: {
+                tests: ['test/*_test.js']
+            }
 
-  });
+        });
 
-  // Actually load this plugin's task(s).
-  grunt.loadTasks('tasks');
+        /* Actually load this plugin's task(s). */
+        grunt.loadTasks('src/js/tasks');
 
-  // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+        /* These plugins provide necessary tasks. */
+        grunt.loadNpmTasks('grunt-contrib-jshint');
+        grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'nodeunit']);
+        /* Run tests. */
+        grunt.registerTask('test', ['nodeunit']);
 
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+        /* By default, lint and run all tests. */
+        grunt.registerTask('default', ['jshint', 'test']);
 
-};
+    };
+
+}());
