@@ -97,6 +97,7 @@ exports.array2archive = function (array) {
         make = array[i].exif[0].make !== undefined ? array[i].exif[0].make[0] : undefined;
         model = array[i].exif[0].model !== undefined ? array[i].exif[0].model[0] : undefined;
         url = array[i].urls[0].url[2].$t;
+        archive.works.push(url);
         if (make !== undefined && archive.tree[make] === undefined) {
             archive.tree[make] = {};
         }
@@ -105,7 +106,6 @@ exports.array2archive = function (array) {
         }
         try {
             archive.tree[make][model].push(url);
-            archive.works.push(url);
         } catch (ignore) {
 
         }
@@ -114,5 +114,36 @@ exports.array2archive = function (array) {
 };
 
 exports.get_makes = function (archive) {
-    return Object.keys(archive.tree);
+    var makes = [],
+        i,
+        make;
+    for (i = 0; i < Object.keys(archive.tree).length; i += 1) {
+        make = Object.keys(archive.tree)[i];
+        makes.push({
+            name: make,
+            id: make.split(' ')[0].toUpperCase()
+        });
+    }
+    return makes;
+};
+
+exports.create_index_page = function (archive, output_folder) {
+    var handlebars = require('handlebars'),
+        fs = require('fs'),
+        data = {
+            title: 'Photo Browser - Index',
+            makes: this.get_makes(archive),
+            urls: archive.works.splice(0, 10)
+        },
+        template,
+        html,
+        that = this;
+    fs.readFile('src/html/index.hbs', 'utf-8', function (error, source) {
+        if (error) {
+            throw new Error(error);
+        }
+        template = handlebars.compile(source);
+        html = template(data);
+        that.create_html_file(html, output_folder, 'index.html');
+    });
 };
