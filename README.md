@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/Kalimaha/grunt-exif-to-photobrowser.svg?branch=master)](https://travis-ci.org/Kalimaha/grunt-exif-to-photobrowser)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com/)
+[![npm version](https://badge.fury.io/js/grunt-exif-to-photobrowser.svg)](https://badge.fury.io/js/grunt-exif-to-photobrowser)
 
 # Photo Browser
 Generate a simple HTML browser for pictures listed in a given EXIF file.
