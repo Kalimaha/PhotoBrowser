@@ -1,0 +1,15 @@
+<div class="row">
+    {{#each urls}}
+        <div class="col-xs-3">
+            <div class="thumbnail_container">
+                <div class="thumbnail">
+                    <img src="{{this}}">
+                </div>
+            </div>
+        </div>
+        {{#if_fourth @index}}
+            </div>
+            <div class="row">
+        {{/if_fourth}}
+    {{/each}}
+</div>

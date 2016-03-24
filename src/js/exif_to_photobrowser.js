@@ -180,10 +180,22 @@ exports.create_index_page = function (archive, output_folder) {
         html,
         that = this,
         source;
+    this.register_partials_and_helpers(handlebars, fs);
     source = fs.readFileSync('src/html/index.hbs', 'utf-8');
     template = handlebars.compile(source);
     html = template(data);
     that.create_html_file(html, output_folder, 'index.html');
+};
+
+exports.register_partials_and_helpers = function (handlebars, fs) {
+    handlebars.registerPartial('header', fs.readFileSync('src/html/header.hbs', 'utf-8'));
+    handlebars.registerPartial('thumbnails', fs.readFileSync('src/html/thumbnails.hbs', 'utf-8'));
+    handlebars.registerHelper('if_fourth', function (index, options) {
+        if ((1 + index) % 4 === 0) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    });
 };
 
 /**
@@ -204,6 +216,7 @@ exports.create_maker_pages = function (archive, output_folder, maker) {
         models = that.get_models(archive, maker.toUpperCase()),
         urls = [],
         filename;
+    this.register_partials_and_helpers(handlebars, fs);
     for (j = 0; j < models.length; j += 1) {
         urls.push.apply(urls, archive.tree[maker.toUpperCase()][models[j].name]);
     }
@@ -236,6 +249,7 @@ exports.create_model_pages = function (archive, output_folder, maker, model) {
         source = fs.readFileSync('src/html/model.hbs', 'utf-8'),
         urls = archive.tree[maker.toUpperCase()][model.toUpperCase()],
         filename;
+    this.register_partials_and_helpers(handlebars, fs);
     data = {
         title: 'Photo Browser - ' + model,
         urls: urls,
