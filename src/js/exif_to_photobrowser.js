@@ -68,11 +68,7 @@ exports.create_html_file = function (file_content, output_directory, output_name
         throw new Error(output_directory + ' is not a directory.');
     }
     try {
-        fs.writeFile(path.join(output_directory, output_name), file_content, function (err) {
-            if (err) {
-                throw new Error(err);
-            }
-        });
+        fs.writeFileSync(path.join(output_directory, output_name), file_content);
     } catch (e) {
         throw new Error('Error while writing the file');
     }
@@ -182,15 +178,12 @@ exports.create_index_page = function (archive, output_folder) {
         },
         template,
         html,
-        that = this;
-    fs.readFile('src/html/index.hbs', 'utf-8', function (error, source) {
-        if (error) {
-            throw new Error(error);
-        }
-        template = handlebars.compile(source);
-        html = template(data);
-        that.create_html_file(html, output_folder, 'index.html');
-    });
+        that = this,
+        source;
+    source = fs.readFileSync('src/html/index.hbs', 'utf-8');
+    template = handlebars.compile(source);
+    html = template(data);
+    that.create_html_file(html, output_folder, 'index.html');
 };
 
 /**
