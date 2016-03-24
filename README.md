@@ -21,6 +21,29 @@ The project requires two parameters to run: ```input_file``` and ```output_folde
 ```
 grunt --input_file=/home/kalimaha/Desktop/works.xml --output_folder=/tmp
 ```
+The execution will produce an output similar to the following:
+```
+Running "exif_to_photobrowser:custom_options" (exif_to_photobrowser) task
+Store the content of the file into an XML string...
+Convert the XML string to a JSON object...
+Create an array of works...
+Re-organize the original content in a tree...
+Create HTML for the index page...
+	Generate HTML for: CANON
+		Generate HTML for: CANON EOS 20D
+		Generate HTML for: CANON EOS 400D DIGITAL
+	Generate HTML for: FUJI PHOTO FILM CO., LTD.
+		Generate HTML for: SLP1000SE
+	Generate HTML for: FUJIFILM
+		Generate HTML for: FINEPIX S6500FD
+	Generate HTML for: LEICA
+		Generate HTML for: D-LUX 3
+	Generate HTML for: NIKON CORPORATION
+		Generate HTML for: NIKON D80
+	Generate HTML for: PANASONIC
+		Generate HTML for: DMC-FZ30
+DONE. You can browse the works at: /tmp/index.html
+```
 
 ## Tests
 To run the tests, please run the following command from the project's root:
@@ -44,6 +67,9 @@ Testing string2object_test.js.OK
 Testing xml2string_test.js...OK
 >> 31 assertions passed (940ms)
 ```
+
+## Continuous Integration
+The project is under continuous integration on [TravisCI](https://travis-ci.org/) and it is available at [this link](https://travis-ci.org/Kalimaha/grunt-exif-to-photobrowser).
 
 ## Sample Output
 |Index|Maker|Model|
