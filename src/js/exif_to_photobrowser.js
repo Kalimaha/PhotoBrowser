@@ -68,7 +68,6 @@ exports.create_html_file = function (file_content, output_directory, output_name
         throw new Error(output_directory + ' is not a directory.');
     }
     try {
-        console.log('WRITE ' + path.join(output_directory, output_name));
         fs.writeFile(path.join(output_directory, output_name), file_content, function (err) {
             if (err) {
                 throw new Error(err);
@@ -127,7 +126,7 @@ exports.get_makers = function (archive) {
         maker = Object.keys(archive.tree)[i];
         makers.push({
             name: maker.toUpperCase(),
-            id: maker.split(' ')[0].toUpperCase()
+            id: this.create_maker_id(maker)
         });
     }
     makers.sort(function (a, b) {
@@ -146,9 +145,6 @@ exports.get_models = function (archive, maker) {
     var models = [],
         i,
         model;
-    if (archive.tree[maker] === undefined) {
-        throw new Error('The maker ' + maker + ' is not available.');
-    }
     for (i = 0; i < Object.keys(archive.tree[maker]).length; i += 1) {
         model = Object.keys(archive.tree[maker])[i];
         models.push({
@@ -162,9 +158,18 @@ exports.get_models = function (archive, maker) {
     return models;
 };
 
+exports.get_works = function (archive, maker, model) {
+    var works = [],
+        i;
+    for (i = 0; i < archive.tree[maker][model].length; i += 1) {
+        works.push(archive.tree[maker][model][i]);
+    }
+    return works;
+};
+
 /**
  * Load the index template and fill it with makes and works.
- * @param archive archive The object storing makes, models and works.
+ * @param archive The object storing makes, models and works.
  * @param output_folder The folder where the new file will be stored.
  */
 exports.create_index_page = function (archive, output_folder) {
@@ -188,35 +193,73 @@ exports.create_index_page = function (archive, output_folder) {
     });
 };
 
-exports.create_maker_pages = function (archive, output_folder) {
+/**
+ * Create one html page for each maker.
+ * @param archive The object storing makes, models and works.
+ * @param output_folder The folder where the new file will be stored.
+ * @param maker The name of the maker.
+ */
+exports.create_maker_pages = function (archive, output_folder, maker) {
     var handlebars = require('handlebars'),
         fs = require('fs'),
         data,
         template,
         html,
         that = this,
-        makers = this.get_makers(archive),
-        maker,
-        i,
         j,
         source,
-        urls,
-        models;
-    for (i = 0; i < makers.length; i += 1) {
-        maker = makers[i];
-        models = that.get_models(archive, maker.id);
-        urls = [];
-        for (j = 0; j < models.length; j += 1) {
-            urls.push.apply(urls, archive.tree[maker.name][models[j].name]);
-        }
-        source = fs.readFileSync('src/html/maker.hbs', 'utf-8');
-        data = {
-            title: 'Photo Browser - ' + maker.name,
-            models: models,
-            urls: urls
-        };
-        template = handlebars.compile(source);
-        html = template(data);
-        that.create_html_file(html, output_folder, maker.id + '.html');
+        models = that.get_models(archive, maker.toUpperCase()),
+        urls = [],
+        filename;
+    for (j = 0; j < models.length; j += 1) {
+        urls.push.apply(urls, archive.tree[maker.toUpperCase()][models[j].name]);
     }
+    source = fs.readFileSync('src/html/maker.hbs', 'utf-8');
+    data = {
+        title: 'Photo Browser - ' + maker,
+        models: models,
+        urls: urls
+    };
+    template = handlebars.compile(source);
+    html = template(data);
+    filename = this.create_maker_id(maker) + '.html';
+    that.create_html_file(html, output_folder, filename);
+};
+
+/**
+ * Create a html page for each model.
+ * @param archive The object storing makes, models and works.
+ * @param output_folder The folder where the new file will be stored.
+ * @param maker
+ * @param model
+ */
+exports.create_model_pages = function (archive, output_folder, maker, model) {
+    var handlebars = require('handlebars'),
+        fs = require('fs'),
+        data,
+        template,
+        html,
+        that = this,
+        source = fs.readFileSync('src/html/model.hbs', 'utf-8'),
+        urls = archive.tree[maker.toUpperCase()][model.toUpperCase()],
+        filename;
+    data = {
+        title: 'Photo Browser - ' + model,
+        urls: urls,
+        maker_name: maker,
+        maker_id: this.create_maker_id(maker)
+    };
+    template = handlebars.compile(source);
+    html = template(data);
+    filename = model.replace(/\s+/g, '').toUpperCase() + '.html';
+    that.create_html_file(html, output_folder, filename);
+};
+
+/**
+ * Create and ID from the maker name.
+ * @param maker Maker's name
+ * @returns {string} The maker ID
+ */
+exports.create_maker_id = function (maker) {
+    return maker.split(' ')[0].toUpperCase();
 };

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Photo Browser - CANON</title>
+        <title>{{title}}</title>
         <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -9,22 +9,26 @@
         <div class="container">
             <header>
                 <h1>
-                    Photo Browser - CANON
+                    {{title}}
                 </h1>
                 <nav>
-                    Available models: |
-                        <a href="CANONEOS20D.html">CANON EOS 20D</a> |
-                        <a href="CANONEOS400DDIGITAL.html">CANON EOS 400D DIGITAL</a> |
+                    <a href="{{maker_id}}.html">
+                        Back to {{maker_name}}
+                    </a>
+                    <span class="pull-right">
+                        <a href="index.html">
+                            Home Page
+                        </a>
+                    </span>
                 </nav>
             </header>
             <hr>
             <div class="row">
+                {{#each urls}}
                     <div class="col-xs-3">
-                        <img class="img-responsive img-thumbnail" src="http://ih1.redbubble.net/work.2041.1.flat,550x550,075,f.jpg">
+                        <img class="img-responsive img-thumbnail" src="{{this}}">
                     </div>
-                    <div class="col-xs-3">
-                        <img class="img-responsive img-thumbnail" src="http://ih1.redbubble.net/work.777577.1.flat,550x550,075,f.jpg">
-                    </div>
+                {{/each}}
             </div>
         </div>
     </body>
